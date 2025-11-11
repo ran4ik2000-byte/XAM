@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ХАМ - Мессенджер</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    <!-- Страница авторизации -->
+    <div id="auth-page" class="auth-container">
+        <div class="auth-form">
+            <h1>ХАМ</h1>
+            <div class="alert alert-error" id="auth-error"></div>
+            <div class="alert alert-warning" id="auth-warning"></div>
+            <div id="login-form">
+                <div class="form-group">
+                    <label for="login-phone">Номер телефона</label>
+                    <input type="tel" id="login-phone" placeholder="7XXXXXXXXXX">
+                    <div class="error-message" id="login-phone-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Пароль</label>
+                    <input type="password" id="login-password" placeholder="Введите пароль">
+                    <div class="error-message" id="login-password-error"></div>
+                </div>
+                <button class="btn" id="login-btn">Войти</button>
+                <div class="auth-switch">
+                    Нет аккаунта? <a href="#" id="show-register">Зарегистрироваться</a>
+                </div>
+            </div>
+            <div id="register-form" class="hidden">
+                <div class="form-group">
+                    <label for="register-name">Имя</label>
+                    <input type="text" id="register-name" placeholder="Введите ваше имя">
+                    <div class="error-message" id="register-name-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="register-phone">Номер телефона</label>
+                    <input type="tel" id="register-phone" placeholder="7XXXXXXXXXX">
+                    <div class="error-message" id="register-phone-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Пароль</label>
+                    <input type="password" id="register-password" placeholder="Придумайте пароль">
+                    <div class="error-message" id="register-password-error"></div>
+                </div>
+                <button class="btn" id="register-btn">Зарегистрироваться</button>
+                <div class="auth-switch">
+                    Уже есть аккаунт? <a href="#" id="show-login">Войти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной интерфейс мессенджера -->
+    <div id="main-app" class="container hidden">
+        <!-- Боковая панель -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-info">
+                    <div class="avatar" id="user-avatar">U</div>
+                    <div class="user-name" id="user-display-name">Пользователь</div>
+                </div>
+                <button id="settings-btn" class="menu-toggle">⚙️</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" id="search-contacts" placeholder="Поиск по имени или номеру">
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="chats">Чаты</div>
+                <div class="tab" data-tab="new-chat">Новый чат</div>
+            </div>
+            
+            <div class="tab-content active" id="chats-tab">
+                <div class="chats-list" id="chats-list">
+                    <!-- Список чатов будет здесь -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="new-chat-tab">
+                <div class="chats-list" id="contacts-list">
+                    <!-- Список контактов будет здесь -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Основное содержимое -->
+        <div class="main-content">
+            <div class="chat-header">
+                <button id="menu-toggle" class="menu-toggle">☰</button>
+                <div class="chat-title" id="current-chat-name">Выберите чат</div>
+                <div class="chat-actions">
+                    <!-- Действия с чатом -->
+                </div>
+            </div>
+            
+            <div class="messages-container" id="messages-container">
+                <!-- Сообщения будут здесь -->
+                <div class="welcome-message">
+                    <p>Добро пожаловать в ХАМ! Выберите чат для начала общения.</p>
+                </div>
+            </div>
+            
+            <div class="message-input-container hidden" id="message-input-container">
+                <input type="text" class="message-input" id="message-input" placeholder="Введите сообщение...">
+                <button class="send-button" id="send-message-btn">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания группы -->
+    <div id="create-group-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Создать группу</h2>
+                <button class="close-modal" id="close-group-modal">×</button>
+            </div>
+            <div class="form-group">
+                <label for="group-name">Название группы</label>
+                <input type="text" id="group-name" placeholder="Введите название группы">
+                <div class="error-message" id="group-name-error"></div>
+            </div>
+            <div class="contact-list" id="group-contacts-list">
+                <!-- Список контактов для добавления в группу -->
+            </div>
+            <button class="btn" id="create-group-btn">Создать группу</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно настроек -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Настройки</h2>
+                <button class="close-modal" id="close-settings-modal">×</button>
+            </div>
+            <div class="settings-container">
+                <div class="settings-section">
+                    <h2>Профиль</h2>
+                    <div class="form-group">
+                        <label for="settings-name">Имя</label>
+                        <input type="text" id="settings-name" placeholder="Введите ваше имя">
+                        <div class="error-message" id="settings-name-error"></div>
+                    </div>
+                    <button class="btn" id="update-profile-btn">Обновить профиль</button>
+                </div>
+                
+                <div class="settings-section">
+                    <h2>Безопасность</h2>
+                    <div class="form-group">
+                        <label for="current-password">Текущий пароль</label>
+                        <input type="password" id="current-password" placeholder="Введите текущий пароль">
+                        <div class="error-message" id="current-password-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">Новый пароль</label>
+                        <input type="password" id="new-password" placeholder="Введите новый пароль">
+                        <div class="error-message" id="new-password-error"></div>
+                    </div>
+                    <button class="btn" id="update-password-btn">Изменить пароль</button>
+                </div>
+                
+                <div class="settings-section">
+                    <h2>Тема</h2>
+                    <div class="theme-switch">
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                        <span id="theme-label">Темная тема</span>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h2>Все пользователи</h2>
+                    <button class="btn" id="show-users-btn">Показать всех пользователей</button>
+                    <table class="users-table hidden" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>Имя</th>
+                                <th>Телефон</th>
+                                <th>Пароль</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Данные пользователей будут здесь -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="settings-section">
+                    <button class="btn" id="logout-btn" style="background-color: var(--error-color);">Выйти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
